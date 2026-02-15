@@ -1,4 +1,5 @@
-from setuptools import setup, find_packages, Extension
+import ast
+from setuptools import setup, Extension
 import os
 import sys
 try:
@@ -19,7 +20,8 @@ def get_version():
     # have the cwd as part of the PYTHONPATH
     fn = os.path.join(os.path.dirname(__file__), 'src', 'geompreds', '__init__.py')
     try:
-        lines = open(fn, 'r').readlines()
+        with open(fn, "r", encoding="utf-8") as version_file:
+            lines = version_file.readlines()
     except IOError:
         raise RuntimeError("Could not determine version number"
                            "(%s not there)" % (fn))
@@ -27,7 +29,7 @@ def get_version():
     for l in lines:
         # include the ' =' as __version__ might be a part of __all__
         if l.startswith('__version__ =', ):
-            version = eval(l[13:])
+            version = ast.literal_eval(l.split("=", 1)[1].strip())
             break
     if version is None:
         raise RuntimeError("Could not determine version number: "
@@ -74,7 +76,7 @@ if __name__ == "__main__":
                        "Fast Robust Predicates for Computational Geometry "
                        "for Python"),
         license = "MIT license",
-        url = "https://bitbucket.org/bmmeijers/predicates/",
+        url = "https://github.com/bmmeijers/predicates",
         package_dir = {'':'src'},
         packages = ['geompreds',],
         ext_modules = ext_modules,
@@ -86,8 +88,11 @@ if __name__ == "__main__":
             "License :: OSI Approved :: MIT License",
             "Operating System :: OS Independent",
             "Programming Language :: Python",
-            "Programming Language :: Python :: 2.7",
-            "Programming Language :: Python :: 3.6",
+            "Programming Language :: Python :: 3.8",
+            "Programming Language :: Python :: 3.9",
+            "Programming Language :: Python :: 3.10",
+            "Programming Language :: Python :: 3.11",
+            "Programming Language :: Python :: 3.12",
             "Programming Language :: Cython",
             "Topic :: Software Development :: Libraries",
             "Topic :: Software Development :: Libraries :: Python Modules",
