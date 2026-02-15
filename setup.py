@@ -7,8 +7,8 @@ try:
 except ImportError:
     cython_available = False
 
-if not cython_available and sys.version_info >= (3, 12):
-    raise RuntimeError("Building on Python 3.12+ requires Cython>=3.0.")
+if not cython_available:
+    raise RuntimeError("Building geompreds requires Cython. Use `pip install .` so build dependencies are installed automatically.")
 
 def get_version():
     """
@@ -54,24 +54,14 @@ elif sys.platform.startswith('linux'):
     # see: https://gcc.gnu.org/wiki/FloatingPointMath
     args = ["-frounding-math","-fsignaling-nans", "-O0"]
 
-if cython_available:
-    # cythonize the source
-    ext_modules = cythonize([Extension("geompreds._geompreds",
-        define_macros = macros,
-        sources = ["src/geompreds/_geompreds.pyx",
-            "src/geompreds/pred.c"],
-        extra_compile_args=args,
-        extra_link_args=args,
-        include_dirs=['src/geompreds'])], build_dir="build")
-else:
-    # use provided c file
-    ext_modules = [Extension("geompreds._geompreds",
-        define_macros = macros,
-        sources = ["src/geompreds/_geompreds.c",
-            "src/geompreds/pred.c"],
-        extra_compile_args=args,
-        extra_link_args=args,
-        include_dirs=['src/geompreds'])]
+# cythonize the source
+ext_modules = cythonize([Extension("geompreds._geompreds",
+    define_macros = macros,
+    sources = ["src/geompreds/_geompreds.pyx",
+        "src/geompreds/pred.c"],
+    extra_compile_args=args,
+    extra_link_args=args,
+    include_dirs=['src/geompreds'])], build_dir="build")
 
 
 if __name__ == "__main__":
