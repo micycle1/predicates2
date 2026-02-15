@@ -15,8 +15,8 @@ Installation
 ------------
 
 - Download the source
-- Run `python setup.py install` (or `python setup.py develop`)
-- Run `python test/test_predicates.py` to run the tests.
+- Run `python -m pip install .` (or `python -m pip install -e .`)
+- Run `python -m unittest discover -s src/geompreds/tests -p "test_*.py"` to run the tests.
 
 
 Usage
