@@ -7,6 +7,9 @@ try:
 except ImportError:
     cython_available = False
 
+if not cython_available and sys.version_info >= (3, 12):
+    raise RuntimeError("Building on Python 3.12+ requires Cython>=3.0.")
+
 def get_version():
     """
     Gets the version number. Pulls it from the source files rather than
@@ -59,7 +62,7 @@ if cython_available:
             "src/geompreds/pred.c"],
         extra_compile_args=args,
         extra_link_args=args,
-        include_dirs=['src/geompreds'])])
+        include_dirs=['src/geompreds'])], build_dir="build")
 else:
     # use provided c file
     ext_modules = [Extension("geompreds._geompreds",
